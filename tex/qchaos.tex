@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage{preamble}
+\usepackage{import}
+\usepackage{csquotes}
+\usepackage{makeidx}
+\usepackage{bookmark}
+\usepackage[backend=biber, sorting=none, style=phys]{biblatex}
+
+%\addbibresource{refs.bib}
+
+\title{Quantum chaos}
+\author{V}
+\date{2025}
+
+\begin{document}
+\maketitle
+\section{Introduction}
+We want to understand quantum chaos, where chaos manifest itself in the statistical properties of our system.
+To do this, let us consider a quantum system whose classical counterpart is chaotic: the quantum billiard. 
+
+\section{Quantum rectangular billiard}
+Let us start from the simplest geometry: the rectangle, that is we want to solve the Helmholtz equation 
+\begin{equation}
+    -\nabla^2 \psi = E_n \psi, \quad \nabla = \left(\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2}\right),
+\end{equation}
+on a rectangular domain $\Omega$ of size $L_x \times L_y$ and Dirichlet boundary conditions $\psi|_{\partial \Omega} = 0$. 
+We can then compare the numerical eigenvalues found with the analytical solution Fig.~\ref{fig:energy_comparison}
+\begin{equation}
+    E_{n,m} = \pi^2(\frac{n^2}{L_x^2} + \frac{m^2}{L_y^2}), \quad n,m \in \mathbb{N}.
+\end{equation}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{../figs/rect_energy_comparison_100.png}
+    \caption{Comparison between numerical and analytical eigenvalues for the rectangular billiard. The red line is $y=x$.}
+    \label{fig:energy_comparison}
+\end{figure}
+To perform the numerical computation, we first discretize the domain and then we build the Hamiltonian matrix corresponding to the Laplacian operator using finite differences: we start from the $1D$ Laplacian with step $h$
+\begin{equation}
+    u^{''}_i = \frac{u_{i+1} - 2u_i + u_{i - 1}}{h^2}
+\end{equation} 
+from which we can build the tridiagonal matrix
+\begin{equation}
+    A = \frac{1}{h^2} \begin{pmatrix}
+        -2 & 1 & 0 & \cdots & 0 \\
+        1 & -2 & 1 & \cdots & 0 \\
+        0 & 1 & -2 & \cdots & 0 \\
+        \vdots & \vdots & \vdots & \ddots & \vdots \\
+        0 & 0 & 0 & \cdots & -2
+    \end{pmatrix}.
+\end{equation}
+Then we obtain the $2D$ Laplacian using the Kronecker product
+\begin{equation}
+    \nabla^2= A_x \otimes I_y + I_x \otimes A_y,
+\end{equation}
+where $I$ is the identity matrix of appropriate size. Finally, the Hamiltonian is given by $H = -\nabla^2$.
+
+
+\end{document}
