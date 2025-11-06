@@ -4,9 +4,11 @@
 \usepackage{csquotes}
 \usepackage{makeidx}
 \usepackage{bookmark}
-\usepackage[backend=biber, sorting=none, style=phys]{biblatex}
-
+%\usepackage[backend=biber]{biblatex}    % , sorting=none, style=phys
 %\addbibresource{refs.bib}
+
+\usepackage{cite}
+
 
 \title{Quantum chaos}
 \author{V}
@@ -54,5 +56,88 @@ Then we obtain the $2D$ Laplacian using the Kronecker product
 \end{equation}
 where $I$ is the identity matrix of appropriate size. Finally, the Hamiltonian is given by $H = -\nabla^2$.
 
+\section{The Expansion method}
+Now we want to generalize our approach to different geometries, for example the Bunimovich stadium. 
+To do this, we will introduce a more general method, called the Expansion method (EM) \cite{10.1119/1.19208}, 
+to construct the Hamiltonian that we want to diagonalize.
+The idea is to start from the rectangular billiard $L_x \times L_y$, of which we know the eigenvalues $E_{n, m}$ and the eigenfunctions $\phi_{n, m}(x)$, which circumscribe our domain $\Omega$.
+\begin{figure}[h]
+    \centering
+\begin{tikzpicture}
+    % Draw the rectangle
+    \draw (0,0) rectangle (4,3);
 
+    % Calculate the center and radius of the circle that fits inside the rectangle
+    \def\rectWidth{4}
+    \def\rectHeight{3}
+    \def\circleRadius{\min(\rectWidth/2, \rectHeight/2)}
+
+    % Draw the generic domain (circle) inside the rectangle
+    %\draw[thick, blue] (\rectWidth/2 - \circleRadius, \rectHeight/2 - \circleRadius) rectangle (\rectWidth/2 + \circleRadius, \rectHeight/2 + \circleRadius);
+
+    % Add labels if needed
+    \node at (0,-0.3) {Rectangle};
+    \node at (2,1.5) {Generic Domain};
+
+\end{tikzpicture}
+\end{figure}
+The 
+\begin{equation}
+    \phi_{n,m} = \sqrt{\frac{2}{L_x}} \sin\left(\frac{\pi}{L_x} n x\right) \sqrt{\frac{2}{L_y}} \sin\left(\frac{\pi}{L_y} m y\right)
+\end{equation}
+are an orthonormal basis:
+\begin{equation}
+    \int_{\text{Rect}}dx\, \phi_{n,m}(x) \phi_{h, k}(x) = \delta_{n, h}\delta_{m, h},
+\end{equation}
+that is we can expand any function $\psi(x)$ as 
+\begin{equation}
+    \psi(x) = \sum_{n, m} c_{n, m}\phi_{n,m}.
+\end{equation}
+Let us now change the notation so to simplify it: instead of using two indices $n,m$ from $1$ to $N$, we will use a single index $i$ from $1$ to $N^2$. 
+The expansion of $\psi$ then reads
+\begin{equation}
+    \psi(x) = \sum_i c_i \phi_i(x).
+    \label{eq:em_psi}
+\end{equation}
+Suppose now $\psi(x)$ satisfies the Schrödinger equation over the domain $\Omega$
+\begin{equation}
+    H \psi = E \psi, 
+\end{equation}
+where the Hamiltonian $H$ is the Laplacian plus the potential
+\begin{equation}
+    V(x) = \begin{cases}
+        0,& x \in \Omega \\
+        \infty,& \text{otherwise}.
+    \end{cases}
+\end{equation}
+It is useful in this problem to slightly change the potential in the following way
+\begin{equation}
+    V(x) = \begin{cases}
+        0,& x \in \Omega \\
+        V_0 (\gg \max\{E_n\}),& x \in \text{Rect} \setminus \Omega\\
+        \infty,& \text{otherwise}.
+    \end{cases}
+\end{equation}
+The region $\text{Rect} \setminus \Omega$ will also be called region II.\\
+Substituting \eqref{eq:em_psi} we get 
+\begin{equation}
+    \sum_{ij} \left(H_{ij} - E \delta_{ij}\right) c_j = 0,
+\end{equation}
+where
+\begin{equation}
+    H_{ij} = \int_{\text{Rect}}dx\, \phi_{i}(x) H \phi_{j}(x) = E_{ij} \delta_{ij} + V_0 v_{ij},
+\end{equation}
+and 
+\begin{equation}
+    v_{ij} = \int_{\text{II}}dx\, \phi_{i}(x) \phi_{j}(x).
+\end{equation}
+So now the problem is to diagonalize the Hamiltonian.
+
+\section{The Bunimovich Stadium}
+Section to define the Bunimovich Stadium. Work in progress...
+
+\section{Results for the Stadium}
+
+\bibliography{refs.bib}{}
+\bibliographystyle{ieeetr}
 \end{document}

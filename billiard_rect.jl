@@ -4,13 +4,13 @@ using ArnoldiMethod
 using Kronecker
 using GLMakie
 using DelimitedFiles
-include("helper.jl")
+include("modules/helper.jl")
 
 # Definition of the Rectangular Billiard B, the Laplacian operator ham over B and the number of eigenvalues k to compute. 
 
 B = RectBilliard(1.0, sqrt(2), 100, 200) # Rectangular Billiard
 ham = rect_laplacian(B) # Hamiltonian
-k = 10  # Number of eigenvalues to compute
+k = 70  # Number of eigenvalues to compute
 
 # Write B on file to export the same configuration.
 
@@ -25,14 +25,14 @@ history
 E_num, Ψ_vecs = partialeigen(decomp)
 
 # Save results on file to not redo them.
-
+#= 
 open("eigenvalues.txt", "w") do io
     writedlm(io, E_num)
 end
 
 open("eigenvecs.txt", "w") do io
     writedlm(io, Ψ_vecs)
-end
+end =#
 
 # Plot k-th eigenstate and compare numerical and analytical eigenvalues.
 
