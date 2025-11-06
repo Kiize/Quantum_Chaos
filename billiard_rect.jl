@@ -14,7 +14,7 @@ k = 70  # Number of eigenvalues to compute
 
 # Write B on file to export the same configuration.
 
-open("rect_billiard.txt", "w") do io
+open("data/rect_billiard.txt", "w") do io
     writedlm(io, RectBilliard_as_vec(B))
 end
 
@@ -25,14 +25,14 @@ history
 E_num, Ψ_vecs = partialeigen(decomp)
 
 # Save results on file to not redo them.
-#= 
-open("eigenvalues.txt", "w") do io
+
+open("data/eigenvalues.txt", "w") do io
     writedlm(io, E_num)
 end
 
-open("eigenvecs.txt", "w") do io
+open("data/eigenvecs.txt", "w") do io
     writedlm(io, Ψ_vecs)
-end =#
+end
 
 # Plot k-th eigenstate and compare numerical and analytical eigenvalues.
 
