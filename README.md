@@ -4,8 +4,21 @@ We want to solve the rectangular quantum billiard, this means finding the eigenv
 
 # How to use it
 
-For now you will be interested in only two files: helper.jl, which contains the functions and the struct to solve this problem, and billiard_rect.jl, which acts as the main file. 
+## Rectangular billiard
 
 In billiard_rect.jl you can define the shape of your Billiard, the parameters (number of points and steps) for the FDM and the number k of eigenvalues/eigenvectors you want to evaluate. The code then will automatically show you the comparison between the numerical energies and the analytical ones, and an heatmap of the k-th eigenvector amplitude. 
 
+The module containing the struct and the functions to solve this problem are stored in helper.jl.
+
 All the plots are saved in the **figs** folder.
+
+## Time evolution
+
+We can then view the time evolution of a superposition of eigenstates in time_evol.jl. 
+
+Import what you have found in rect_billiard.jl and generate an initial state as a linear combination of the eigenstate found.
+
+Struct and function are found in help_evol.jl, while the final video is in the **figs** folder.
+
+A video example below:
+![](figs/time_animation.mp4)
