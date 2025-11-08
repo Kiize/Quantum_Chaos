@@ -20,5 +20,6 @@ Import what you have found in rect_billiard.jl and generate an initial state as 
 
 Struct and function are found in help_evol.jl, while the final video is in the **figs** folder.
 
-<> (A video example below:
-https://github.com/Kiize/Quantum_Chaos/blob/main/figs/time_animation.mp4)
+<!--- A video example below:
+![](figs/time_animation.mp4)
+-->
