@@ -3,44 +3,46 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: qchaos.aux
 The style file: ieeetr.bst
 Database file #1: refs.bib
-You've used 1 entry,
+Warning--can't use both author and editor fields in Haake1991
+You've used 3 entries,
             1876 wiz_defined-function locations,
-            485 strings with 3641 characters,
-and the built_in function-call counts, 349 in all, are:
-= -- 34
-> -- 11
+            504 strings with 3941 characters,
+and the built_in function-call counts, 974 in all, are:
+= -- 101
+> -- 29
 < -- 0
-+ -- 4
-- -- 3
-* -- 27
-:= -- 55
-add.period$ -- 1
-call.type$ -- 1
-change.case$ -- 1
++ -- 11
+- -- 8
+* -- 66
+:= -- 133
+add.period$ -- 4
+call.type$ -- 3
+change.case$ -- 2
 chr.to.int$ -- 0
-cite$ -- 1
-duplicate$ -- 16
-empty$ -- 29
-format.name$ -- 3
-if$ -- 83
+cite$ -- 4
+duplicate$ -- 52
+empty$ -- 86
+format.name$ -- 8
+if$ -- 243
 int.to.chr$ -- 0
-int.to.str$ -- 1
-missing$ -- 1
-newline$ -- 6
-num.names$ -- 1
-pop$ -- 1
+int.to.str$ -- 3
+missing$ -- 4
+newline$ -- 13
+num.names$ -- 3
+pop$ -- 8
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 15
+skip$ -- 46
 stack$ -- 0
-substring$ -- 28
-swap$ -- 9
+substring$ -- 70
+swap$ -- 30
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 3
-width$ -- 2
-write$ -- 12
+warning$ -- 1
+while$ -- 9
+width$ -- 4
+write$ -- 32
+(There was 1 warning)

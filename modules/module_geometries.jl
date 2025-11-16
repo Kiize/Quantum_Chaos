@@ -1,4 +1,4 @@
-using LinearAlgebra
+using LinearAlgebra, Integrals
 
 struct RectGeom
     Lx_min::Float64
@@ -26,6 +26,20 @@ function BunStadium(R::RectGeom)
     return BunStadium(R, circ_right, circ_left)
 end
 
+function area_stadium(S::BunStadium)
+    area_rect = (S.rect.Lx_max - S.rect.Lx_min) * (S.rect.Ly_max - S.rect.Ly_min)
+    area_circ = S.circ_left.radius^2 * pi
+
+    return area_rect + area_circ
+end
+
+function perimeter_stadium(S::BunStadium)
+    per_circ = 2 * pi * S.circ_left.radius
+    per_rect = 2 * (S.rect.Lx_max - S.rect.Lx_min)
+
+    return per_circ + per_rect
+end
+
 
 function isin_rect(R::RectGeom, x::Float64, y::Float64)
     return (R.Lx_min <= x <= R.Lx_max) && (R.Ly_min <= y <= R.Ly_max)
@@ -50,6 +64,12 @@ rect_around(S::BunStadium) = rect_around(S.rect.Lx_min - S.circ_left.radius,
                                             S.rect.Lx_max + S.circ_right.radius,
                                             S.rect.Ly_min,
                                             S.rect.Ly_max)
+
+# Function to export the RectGeom parameters as a vector, used to write it on file.
+function RectGeom_as_vec(R::RectGeom)
+    r = Union{Float64, Float64, Float64, Float64}[R.Lx_min::Float64, R.Lx_max::Float64, R.Ly_min::Float64, R.Ly_max::Float64]
+    return r
+end
 
 # Eigenfunctions of the external rectangle.
 function rect_eigenfun(R::RectGeom, nx::Int, ny::Int, x::Float64, y::Float64)
@@ -86,9 +106,13 @@ function base_map(R::RectGeom, N::Int)
     return raw_states[1:N]
 end
 
-rect_eigenfun(R, k::Int, x, y) = begin
-    base = base_map(R, k) 
-    (_, nx, ny) = base[k]
+rect_eigenfun(R, k::Int, x, y, flattened_states_sorted) = begin
+    # assume flattened_states_sorted is already the k-th element 
+    #base = flattened_states_sorted[1:k]
+    base = flattened_states_sorted
+    #base = base_map(R, k) 
+    #(_, nx, ny) = base[k]
+    (_, nx, ny) = base
     return rect_eigenfun(R, nx, ny, x, y)
 end
 
@@ -98,7 +122,8 @@ end
 end =#
 
 # Returns v_{nm}       
-function integration_on_II(R::RectGeom, S::BunStadium, n::Int, m::Int, x_vals::StepRangeLen{Float64}, y_vals::StepRangeLen{Float64})
+function integration_on_II(R::RectGeom, S::BunStadium, n::Int, m::Int, x_vals::StepRangeLen{Float64}, y_vals::StepRangeLen{Float64}, flattened_states::Vector{Tuple{Float64, Int64, Int64}})
+    # Old code, faster.
     dx = step(x_vals)
     dy = step(y_vals)
 
@@ -107,12 +132,31 @@ function integration_on_II(R::RectGeom, S::BunStadium, n::Int, m::Int, x_vals::S
     for x in x_vals
         for y in y_vals
             if !isin_stadium(S, x, y)
-                psi_n = rect_eigenfun(R, n, x, y)
-                psi_m = rect_eigenfun(R, m, x, y)
+                psi_n = rect_eigenfun(R, n, x, y, flattened_states[n])
+                psi_m = rect_eigenfun(R, m, x, y, flattened_states[m])
                 integral += psi_n * psi_m * dx * dy
             end
         end
     end
 
+    # New code using Integrals.
+    #= 
+    f(u, p) = rect_eigenfun(R, n, u[1], u[2]) * rect_eigenfun(R, m, u[1], u[2]) * !isin_stadium(S, u[1], u[2])
+    domain = ([x_vals[1], y_vals[1]], [x_vals[end], y_vals[end]])
+    prob = IntegralProblem(f, domain)
+    sol = solve(prob, HCubatureJL(); reltol = 1e-3, abstol = 1e-3)
+
+    integral = sol.u =#
+
     return integral
+end
+
+function relative_error(E::Vector{Float64})
+    E_out = similar(E)
+    E_out[1] = 1
+    for i in 2:length(E)
+        E_out[i] = abs((E[i] - E[i - 1]))/E[i - 1]
+    end
+
+    return E_out
 end

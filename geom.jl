@@ -13,13 +13,21 @@ R = RectGeom(0.0, 1.0, 0.0, 2.0)
 S = BunStadium(R)
 R_out = rect_around(S)
 
+# Write R_out on file to export the same configuration.
+
+open("data/rect_around.txt", "w") do io
+    writedlm(io, RectGeom_as_vec(R_out))
+end
+
 # Grid
 
-N = 70 
+N = 200 
+k = N  # Number of eigenvalues to compute
 
 x = range(R_out.Lx_min, R_out.Lx_max, length=N)
 y = range(R_out.Ly_min, R_out.Ly_max, length=N)
 
+# Plot stadium.
 #= points_in_stad = [(xi, yi) for xi in x, yi in y if isin_stadium(S, xi, yi)]
 points_outside = [(xi, yi) for xi in x, yi in y if !isin_stadium(S, xi, yi)]
 
@@ -29,73 +37,80 @@ scatter!(ax, points_in_stad, color=:red)
 scatter!(ax, points_outside, color=:blue)
 fig =#
 
-# v_nm
+# Plot.
 #= 
-V_matrix = zeros(N, N) # La matrice v_nm
-
-println("Calcolo della matrice V_nm $(N) × $(N)...\n")
-
-# Cicli nidificati per n e m
-@showprogress @threads for n = 1:N   # problem with @distributed
-    # Vettore delle autofunzioni phi_n sulla griglia (linearizzato, solo Region II)
-    # linearizzato_phi_n = P[:, :, n][Mask .== 1] 
-    # Si consiglia di ciclare e usare gli indici per chiarezza e per evitare grosse allocazioni.
-
-    for m = n:N # Simmetria: calcola solo la triangolare superiore (H_nm = H_mn)
-        v_nm = integration_on_II(R, S, n, m, x, y)
-
-        V_matrix[n, m] = v_nm
-        V_matrix[m, n] = v_nm # Simmetria
-    end
-end
-
-println("\n Matrice V_nm calcolata.\n")
-
-open("data/matrix_v_nm_N$(N).txt", "w") do io
-    writedlm(io, V_matrix)
-end
- =#
-
-# Eigenvalues
-#= 
-R_out_billiard = RectBilliard(R_out.Lx_max - R_out.Lx_min, R_out.Ly_max - R_out.Ly_min, N, N) # Rectangular Billiard
-ham = rect_laplacian(R_out_billiard) # Hamiltonian
-k = 70  # Number of eigenvalues to compute
-
-# Diagonalization using Arnoldi method.
-
-decomp, history = partialschur(ham, nev=k, tol=1e-6, which=:SR)  
-history
-E_num, Ψ_vecs = partialeigen(decomp)
-
-# Save results on file to not redo them.
-
-open("data/eigenvalues_rect_N$(N).txt", "w") do io
-    writedlm(io, E_num)
-end =#
-
-# Diagonalization
-
-E_all = vec(readdlm("data/eigenvalues_rect_N$(N).txt"))
-V_matrix = readdlm("data/matrix_v_nm_N$(N).txt")
-V_0 = 1000.0
-k = 70
-
-H = Diagonal(E_all) + V_0 * V_matrix
-
-decomp, history = partialschur(H, nev=k, tol=1e-6, which=:SR)  
-history
-E_num_S, Ψ_vecs_S = partialeigen(decomp)
-
-#= open("data/eigenvalues_Stadium_N$(N).txt", "w") do io
-    writedlm(io, E_num_S)
-end
-
-open("data/eigenfun_Stadium_N$(N).txt", "w") do io
-    writedlm(io, Ψ_vecs_S)
-end =#
-
-# Plot
 fig = Figure(size=(1200, 800))
-ax = Axis(fig[1,1])
-scatter!(ax, E_num_S, marker=:circle, label="Stadium Eigenvalues")
+ax = Axis(fig[1,1], xlabel = "Energy index", ylabel="relative error")#, title="Relative error of Stadium Eigenvalues")
+ax2 = Axis(fig[1,2], xlabel = "Energy index", ylabel="E")#, title="Relative error of Stadium Eigenvalues")
+
+
+function rel_err_plot(N::Int, ax::Axis)
+    E_num_S = vec(readdlm("data/data_stadium/eigenvalues_Stadium_k$(N).txt"))
+    rel_E = relative_error(E_num_S)
+    
+    # Plot
+    scatter!(ax, rel_E, label="N = $(N)") 
+end
+
+function stadium_E_plot(N::Int, ax::Axis)
+    E_num_S = vec(readdlm("data/data_stadium/eigenvalues_Stadium_k$(N).txt"))
+    
+    # Plot
+    scatter!(ax, E_num_S, label="N = $(N)") 
+end
+
+N_list = [1600, 2500, 3600, 4900]
+#N_list = [50]
+for n in N_list
+    n = n ÷ 2
+    rel_err_plot(n, ax)
+    stadium_E_plot(n, ax2)
+end
+
+axislegend(ax)
+axislegend(ax2)
+
+save("figs/stadium_eigenvalues_compare.png", fig) =#
+
+# Application of Weyl's law.
+
+N = 4900 ÷ 2
+fig = Figure(size=(1200, 800))
+
+function weyl_energy(S::BunStadium, E::Vector{Float64})
+    A = area_stadium(S)
+    L = perimeter_stadium(S)
+
+    # TO DO: fit parameters
+
+    N = A / (4 * pi) .* E - L / (4 * pi) .* sqrt.(E)
+
+    return N
+end
+
+function weyl_law(N::Int, fig::Figure)
+    E_num_S = vec(readdlm("data/data_stadium/eigenvalues_Stadium_k$(N).txt"))
+
+
+    ϵ = weyl_energy(S, E_num_S)
+    s = diff(ϵ)
+    ax = Axis(fig[1,1], xlabel = L"Spacing $s$", ylabel=L"P(s)", title="Distribution of the spacings for k = $(N)")
+
+
+    hist!(ax, s, normalization=:pdf)
+
+    # PDFs.
+    p(s) = exp(-s)
+    goe(s) = pi * s / 2 * exp(-pi * s^2 / 4)
+
+    s_plot = minimum(s):0.01:maximum(s)
+    p_values = p.(s_plot)
+    goe_values = goe.(s_plot)
+
+    lines!(ax, s_plot, p_values, color = :red, label="Poisson")
+    lines!(ax, s_plot, goe_values, color = :green, label="GOE")
+end
+
+
+weyl_law(N, fig)
+save("figs/hist_ene_stadium_N$(N).png", fig)

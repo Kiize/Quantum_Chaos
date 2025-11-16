@@ -1,4 +1,4 @@
-using ArnoldiMethod, LinearAlgebra, SparseArrays, Kronecker, GLMakie
+using LinearAlgebra, SparseArrays, Kronecker, GLMakie
 
 # Definition of the Rectangular Billiard with dimension Lx × Ly and number of points Nx × Ny. 
 struct RectBilliard 

@@ -57,30 +57,36 @@ Then we obtain the $2D$ Laplacian using the Kronecker product
 where $I$ is the identity matrix of appropriate size. Finally, the Hamiltonian is given by $H = -\nabla^2$.
 
 \section{The Expansion method}
-Now we want to generalize our approach to different geometries, for example the Bunimovich stadium. 
+Now we want to generalize our approach to different geometries, for example the Bunimovich stadium which is a rectangle of length $L$ and width $2R$, capped by two semicircles of radius $R$.
+\\
 To do this, we will introduce a more general method, called the Expansion method (EM) \cite{10.1119/1.19208}, 
 to construct the Hamiltonian that we want to diagonalize.
-The idea is to start from the rectangular billiard $L_x \times L_y$, of which we know the eigenvalues $E_{n, m}$ and the eigenfunctions $\phi_{n, m}(x)$, which circumscribe our domain $\Omega$.
+The idea is to start from the rectangular billiard $L_x \times L_y$, of which we know the eigenvalues $E_{n, m}$ and the eigenfunctions $\phi_{n, m}(x)$, which circumscribe our domain $\Omega$ as shown in Fig.~\ref{fig:Omega}.
 \begin{figure}[h]
-    \centering
-\begin{tikzpicture}
-    % Draw the rectangle
-    \draw (0,0) rectangle (4,3);
+\centering
+\begin{tikzpicture}[scale=1.2, thick]
 
-    % Calculate the center and radius of the circle that fits inside the rectangle
-    \def\rectWidth{4}
-    \def\rectHeight{3}
-    \def\circleRadius{\min(\rectWidth/2, \rectHeight/2)}
+% Rectangle (bounding box)
+\draw[black] (1.5,0.6) rectangle (4.86,3.4);
+\node[above left] at (4.86,3.4) {$\text{Rect}$};
 
-    % Draw the generic domain (circle) inside the rectangle
-    %\draw[thick, blue] (\rectWidth/2 - \circleRadius, \rectHeight/2 - \circleRadius) rectangle (\rectWidth/2 + \circleRadius, \rectHeight/2 + \circleRadius);
+% Generic domain inside (irregular blob)
+\draw[fill=blue!10, thick, smooth cycle]
+  plot coordinates {(1.5,1.2) (2,2.8) (3.5,3.4) (4.8,2.5)
+                    (4.5,1.2) (3,0.6) (2,0.8)};
 
-    % Add labels if needed
-    \node at (0,-0.3) {Rectangle};
-    \node at (2,1.5) {Generic Domain};
+% Label for the inner domain
+\node at (3,2) {$\Omega$};
+
+% Optional: small arrows to suggest normal directions (decorative)
+%\draw[->, gray!70] (6,2) -- +(0.5,0) node[right] {$n_R$};
+%\draw[->, gray!70] (3.8,3.4) -- +(0,0.5) node[above] {$n_\Omega$};
 
 \end{tikzpicture}
+\caption{Rectangle circumscribing our domain $\Omega$.}
+\label{fig:Omega}
 \end{figure}
+\\
 The 
 \begin{equation}
     \phi_{n,m} = \sqrt{\frac{2}{L_x}} \sin\left(\frac{\pi}{L_x} n x\right) \sqrt{\frac{2}{L_y}} \sin\left(\frac{\pi}{L_y} m y\right)
@@ -93,7 +99,7 @@ that is we can expand any function $\psi(x)$ as
 \begin{equation}
     \psi(x) = \sum_{n, m} c_{n, m}\phi_{n,m}.
 \end{equation}
-Let us now change the notation so to simplify it: instead of using two indices $n,m$ from $1$ to $N$, we will use a single index $i$ from $1$ to $N^2$. 
+Let us now change the notation so to simplify it: instead of using two indices $n,m$ from $1$ to $N$, we will use a single index $i$ from $1$ to $M = N^2$. 
 The expansion of $\psi$ then reads
 \begin{equation}
     \psi(x) = \sum_i c_i \phi_i(x).
@@ -133,11 +139,53 @@ and
 \end{equation}
 So now the problem is to diagonalize the Hamiltonian.
 
-\section{The Bunimovich Stadium}
-Section to define the Bunimovich Stadium. Work in progress...
-
 \section{Results for the Stadium}
+Let us consider a Bunimovich stadium, where the rectangle has length $L_x = 1, L_y = 2$. Consider, using our previous notation, different values $M = N^2 \in {1600, 2500, 3600, 4900}$, then solving the problem for the first $k = M/2$ eigenvalues
+we obtain Fig.~\ref{fig:stadium_ene}.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{../figs/stadium_eigenvalues_compare.png}
+    \caption{Numerical energies for the Bunimovich stadium on the right, relative error $\frac{|E_i - E_{i -1}|}{E_{i-1}}$ for the energies on the left.}
+    \label{fig:stadium_ene}
+\end{figure}
 
+\section{Unfolding the spectrum}
+The chaotic properties of a quantum system lie in its spectrum, however, because the system is quantum, the lowest energetical levels are distant from each other, while the highest are next to each other.
+This mean that before analyzing the spectrum, we have to perform a procedure, called \textit{unfolding}, which normalizes our spectrum into one with 
+constant energy density $\rho$.
+\\
+We can unfold the spectrum using the Weyl's law \cite{B_cker_2011,Haake1991}, which states that the average number of states $N(E)$ up to the energy $E$, in the $2D$ case, are given by
+\begin{equation}
+    N_{avg}(E) = \frac{A}{4 \pi} E - \frac{L}{4 \pi} \sqrt{E} + C,
+\end{equation}
+where $A$ is the area of the billiard, $L$ is its perimeter and $C$ is a constant.
+\\
+We can now use this function to construct an unfolded spectrum $\epsilon$ where
+\begin{equation}
+    \epsilon_n = N_{avg}(E_n)
+\end{equation}
+and calculate the spacings $s$ of this spectrum
+\begin{equation}
+    s_n = \epsilon_{n + 1} - \epsilon_n.
+\end{equation}
+The chaotic properties then can be seen looking at the distribution of these spacings.
+In particular we want to compare (Fig.~\ref{fig:pdf_comp})this histogram to two distributions: the Poisson 
+\begin{equation}
+    P(s) = e^{-s},
+\end{equation}
+which is the theoretical distribution for integrable system, and the GOE distribution
+\begin{equation}
+    P(s) = \frac{\pi s}{2} e^{-\pi s^2 / 4},
+\end{equation}
+which is the theoretical distribution for chaotic systems.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../figs/hist_ene_stadium_N1800.png}
+    \caption{Plot of the histogram of out spacings and the two distributions defined previously. In this case we have computed $k = 1800$ eigenvalues.}
+    \label{fig:pdf_comp}
+\end{figure}
+
+\clearpage
 \bibliography{refs.bib}{}
 \bibliographystyle{ieeetr}
 \end{document}
