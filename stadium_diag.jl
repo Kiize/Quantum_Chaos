@@ -1,6 +1,5 @@
 using LinearAlgebra
 using DelimitedFiles
-#using ArnoldiMethod
 using Arpack
 using ProgressMeter
 include("modules/module_geometries.jl")
@@ -17,11 +16,7 @@ function stadium_diag(M::Int, k::Int)
     H = Diagonal(E_all) + V_0 * V_matrix
 
     println("\n Diagonalizing with M = $(M), k = $(k)...\n")
-
-    #= decomp, history = partialschur(H, nev=k, tol=1e-6, which=:SR)  
-    history
-    E_num_S, Ψ_vecs_S = partialeigen(decomp) =#
-
+    
     E_num_S, Ψ_vecs_S = eigs(H, nev=k, which=:SM)
 
     println("\n Saving results on file...\n")
@@ -38,6 +33,6 @@ end
 #M_list = [10, 20, 50, 70, 100]
 M_list = [1600, 2500, 3600, 4900]
 for M in M_list
-    k = M ÷ 2
+    k = M ÷ 10 * 8
     stadium_diag(M, k)
 end

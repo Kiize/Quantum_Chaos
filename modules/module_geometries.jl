@@ -33,6 +33,10 @@ function area_stadium(S::BunStadium)
     return area_rect + area_circ
 end
 
+function area_rect(R::RectGeom)
+    return (R.Lx_max - R.Lx_min) * (R.Ly_max - R.Ly_min)
+end
+
 function perimeter_stadium(S::BunStadium)
     per_circ = 2 * pi * S.circ_left.radius
     per_rect = 2 * (S.rect.Lx_max - S.rect.Lx_min)
@@ -40,6 +44,9 @@ function perimeter_stadium(S::BunStadium)
     return per_circ + per_rect
 end
 
+function perimeter_rect(R::RectGeom)
+    return 2 * (R.Lx_max - R.Lx_min) + 2 * (R.Ly_max - R.Ly_min)
+end
 
 function isin_rect(R::RectGeom, x::Float64, y::Float64)
     return (R.Lx_min <= x <= R.Lx_max) && (R.Ly_min <= y <= R.Ly_max)
@@ -106,7 +113,7 @@ function base_map(R::RectGeom, N::Int)
     return raw_states[1:N]
 end
 
-rect_eigenfun(R, k::Int, x, y, flattened_states_sorted) = begin
+rect_eigenfun(R, x, y, flattened_states_sorted) = begin
     # assume flattened_states_sorted is already the k-th element 
     #base = flattened_states_sorted[1:k]
     base = flattened_states_sorted
@@ -132,8 +139,8 @@ function integration_on_II(R::RectGeom, S::BunStadium, n::Int, m::Int, x_vals::S
     for x in x_vals
         for y in y_vals
             if !isin_stadium(S, x, y)
-                psi_n = rect_eigenfun(R, n, x, y, flattened_states[n])
-                psi_m = rect_eigenfun(R, m, x, y, flattened_states[m])
+                psi_n = rect_eigenfun(R, x, y, flattened_states[n])
+                psi_m = rect_eigenfun(R, x, y, flattened_states[m])
                 integral += psi_n * psi_m * dx * dy
             end
         end

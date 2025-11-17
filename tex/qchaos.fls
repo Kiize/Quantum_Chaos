@@ -375,11 +375,11 @@ INPUT ../figs/stadium_eigenvalues_compare.png
 INPUT ../figs/stadium_eigenvalues_compare.png
 INPUT ../figs/stadium_eigenvalues_compare.png
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
-INPUT ../figs/hist_ene_stadium_N1800.png
-INPUT ../figs/hist_ene_stadium_N1800.png
-INPUT ../figs/hist_ene_stadium_N1800.png
-INPUT ../figs/hist_ene_stadium_N1800.png
-INPUT ../figs/hist_ene_stadium_N1800.png
+INPUT ../figs/hist_ene_stadium_N2450.png
+INPUT ../figs/hist_ene_stadium_N2450.png
+INPUT ../figs/hist_ene_stadium_N2450.png
+INPUT ../figs/hist_ene_stadium_N2450.png
+INPUT ../figs/hist_ene_stadium_N2450.png
 INPUT ./qchaos.bbl
 INPUT ./qchaos.bbl
 INPUT qchaos.bbl

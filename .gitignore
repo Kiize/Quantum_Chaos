@@ -1,3 +1,3 @@
 test.jl
 test_makie.jl
-.\data
+data/

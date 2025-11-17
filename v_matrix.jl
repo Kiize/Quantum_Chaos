@@ -9,7 +9,7 @@ include("modules/helper.jl")
 R = RectGeom(0.0, 1.0, 0.0, 2.0)
 S = BunStadium(R)
 R_out = rect_around(S)
-N = 8
+N = 70
 M = N^2
 V_matrix = zeros(M, M) # La matrice v_nm
 
