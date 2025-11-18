@@ -167,3 +167,85 @@ function relative_error(E::Vector{Float64})
 
     return E_out
 end
+
+# P matrix. The P matrix contains the eigenfunctions of the rectangular billiard evaluated on the grid points.
+# Given the billiard of length Lx × Ly we can discretize it and construct the grid x_grid × y_grid. 
+function calc_P_matrix(flattened_states, x_grid, y_grid, Lx, Ly)
+    len = length(flattened_states)
+    Nx, Ny = length(x_grid), length(y_grid) # In principle we could implement the case where Nx ≠ Ny.
+    M = Nx * Ny
+    P = zeros(Float64, M, len) # P is M × len.
+    A = sqrt(4.0 / (Lx * Ly)) # Normalization factor.
+
+    @showprogress "Calculating P matrix..." for m = 1:len
+        _, nx_m, ny_m = flattened_states[m] 
+        
+        # Eigenfunctions on x and y.
+        Sx = sin.(nx_m * pi * x_grid / Lx) 
+        Sy = sin.(ny_m * pi * y_grid / Ly)
+
+        Z_m = A * Sx * Sy'
+        P[:, m] .= vec(Z_m) 
+    end
+
+    # Mask to force ψ (P_matrix) = 0 outside the stadium.
+    Mask_linear = zeros(M)
+    for (k, (x, y)) in enumerate(zip(repeat(x_grid, outer=Nx), repeat(y_grid, inner=Ny)))
+        if isin_stadium(S, x, y) 
+            Mask_linear[k] = 1.0
+        end
+    end
+    return P, Mask_linear
+end
+
+# Function to evaluate the state ψ = ∑ₘ cₘ ϕₘ, where cₘ = coeff are the eigenstates evaluated in stadium_diag.jl.
+function eigenfun(coeff, flattened_states, ik::Int, x_grid, y_grid, Lx, Ly)
+    c_k = coeff[:, ik]
+    N_grid = length(x_grid)
+    P, Mask_linear = calc_P_matrix(flattened_states, x_grid, y_grid, Lx, Ly)
+
+    # Psi_k_linear is a vector of length M.
+    Psi_k_linear = P * c_k 
+    
+    # Masking, if needed, our vector.
+    Psi_k_masked = Psi_k_linear #.* Mask_linear
+    return reshape(Psi_k_masked, N_grid, N_grid)
+end
+
+
+# Function to plot the ik-th eigenstate, it also saves the plots in the "figs" folder.
+function plot_stadium_eigenstate(k, R::RectGeom, N::Int, f::Figure, f2::Figure, flattened_states, coeff, ik::Int)
+    Lx = R.Lx_max - R.Lx_min
+    Ly = R.Ly_max - R.Ly_min
+    
+    hx = Lx / (N + 1)
+    hy = Ly / (N + 1) 
+    
+    # Points for the heatmap and contour plot.
+    x_int = range(R.Lx_min + hx, R.Lx_max - hx, length=N)
+    y_int = range(R.Ly_min + hy, R.Ly_max - hy, length=N)
+    
+    # Reshape it in 2D array for plotting.
+    #psi_2D = eigenfun_old(x_int, y_int, flattened_states, coeff, k, R)
+    psi_2D = eigenfun(coeff, flattened_states, ik, x_int, y_int, Lx, Ly)
+    #psi_2D = reshape(psi_vector, N, N)
+
+    # Heatmap.
+    ax = Axis(f[1, 1], title="Probability density |ψ($(ik))|^2 (FDM)", xlabel="x", ylabel="y")
+    hm = heatmap!(ax, x_int, y_int, abs2.(psi_2D))
+    Colorbar(f[1, 2], hm)
+    # Contour.
+    #ax2 = Axis(f2[1, 1], title="Probability density |ψ($(ik))|^2 (FDM)", xlabel="x", ylabel="y")
+    ax2 = Axis3(f2[1,1]; aspect = (1,1,0.7), perspectiveness = 0.5)
+
+    cmap = :viridis # :diverging_bkr_55_10_c35_n256
+    contourf!(ax2, x_int, y_int, abs2.(psi_2D), colormap=cmap)
+    contour3d!(ax2, x_int, y_int, abs2.(psi_2D); levels = 14, colormap = cmap, transparency = true, linewidth = 5) # 3d contour on the right.
+
+    # Save figures.
+    save("figs/figs_stadium/rect_eigenstate_$k.png", f)
+    save("figs/figs_stadium/rect_eigenstate_$(k)_cont.png", f2)
+    #f, f2
+    display(f)
+    #display(f2)
+end
