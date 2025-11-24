@@ -2,8 +2,10 @@ using LinearAlgebra
 using DelimitedFiles
 using Arpack
 using ProgressMeter
-include("modules/module_geometries.jl")
-include("modules/helper.jl")
+#include("modules/module_geometries.jl")
+#include("modules/helper.jl")
+
+using QuantumChaos
 
 # Diagonalization of the M × M Hamiltonian matrix
 # H = E_all 𝕀_M + V_0 V_matrix.
@@ -32,6 +34,7 @@ end
 
 #M_list = [10, 20, 50, 70, 100]
 M_list = [1600, 2500, 3600, 4900]
+#M_list = [6400]
 for M in M_list
     k = M ÷ 10 * 8
     stadium_diag(M, k)

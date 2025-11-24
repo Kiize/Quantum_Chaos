@@ -2,6 +2,8 @@
 
 We want to solve the rectangular quantum billiard, this means finding the eigenvalues and the eigenvectors. To do this we use the Finite Difference Method (FDM) to solve the Helmoltz equation over a rectangular grid. 
 
+For a more in depth discussion refer to the pdf qchaos.pdf in the tex folder.
+
 # How to use it
 
 ## Rectangular billiard

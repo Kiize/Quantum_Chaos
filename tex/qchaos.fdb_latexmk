@@ -1,17 +1,18 @@
 # Fdb version 4
-["bibtex qchaos"] 1763321608.89294 "qchaos.aux" "qchaos.bbl" "qchaos" 1763321632.70942 0
+["bibtex qchaos"] 1763485800.11288 "qchaos.aux" "qchaos.bbl" "qchaos" 1763570687.92633 0
   "./refs.bib" 1763137315.11867 3037 f94a4a77bd158b7e41fd1f43166f9250 ""
   "/usr/share/texmf-dist/bibtex/bst/base/ieeetr.bst" 1755987285 18361 1a00e58565e7f19bf2b3e1bfb82254ae ""
-  "qchaos.aux" 1763321632.38054 4132 5e4b68b13466db0863d335c1d4c6fc00 "pdflatex"
+  "qchaos.aux" 1763570687.6874 6045 a71976fd78af302e337879196e754d3a "pdflatex"
   (generated)
   "qchaos.bbl"
   "qchaos.blg"
   (rewritten before read)
-["pdflatex"] 1763321630.89462 "/home/viper/Documents/Q_Chaos/tex/qchaos.tex" "qchaos.pdf" "qchaos" 1763321632.70968 0
-  "../figs/hist_ene_stadium_N2450.png" 1763318281.46467 79641 616268ae950bc5265498cb3571400a4f ""
+["pdflatex"] 1763570686.27054 "/home/viper/Documents/Q_Chaos/tex/qchaos.tex" "qchaos.pdf" "qchaos" 1763570687.92654 0
+  "../figs/figs_stadium/rect_eigenstate_k3920_ik1.png" 1763478694.1365 33155 bda3d2a786d656c0bc8147a67272d519 ""
+  "../figs/hist_ene_stadium_N6400_fit.png" 1763562840.52677 86340 300f5e5b0b1bc2ab7f35e16e818dc132 ""
   "../figs/rect_energy_comparison_100.png" 1762187906.99663 21345 f7225ddc5ddd8aaa096b61c795733481 ""
   "../figs/stadium_eigenvalues_compare.png" 1763054455.13938 62788 cd45e6720581e7cdb1a49e453224da7f ""
-  "/home/viper/Documents/Q_Chaos/tex/qchaos.tex" 1763321630.61154 8200 b1dce7549af888751e0ba97fa86dfe6c ""
+  "/home/viper/Documents/Q_Chaos/tex/qchaos.tex" 1763570685.9684 9622 8cde1572a7bf110dcec75a257535822a ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1755987285 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1755987285 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1755987285 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -237,9 +238,9 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1762909549 5311557 9da84c45f5b388655502706482323571 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1762909488 2008251 38734a06d67bdfc49ab860a6bde53b32 ""
   "preamble.sty" 1762117516.58884 906 d13cfb188f1494187aa905f88ccdc399 ""
-  "qchaos.aux" 1763321632.38054 4132 5e4b68b13466db0863d335c1d4c6fc00 "pdflatex"
-  "qchaos.bbl" 1763321608.98654 548 8f8e8af080d45ff50d10711e718eddda "bibtex qchaos"
-  "qchaos.tex" 1763321630.61154 8200 b1dce7549af888751e0ba97fa86dfe6c ""
+  "qchaos.aux" 1763570687.6874 6045 a71976fd78af302e337879196e754d3a "pdflatex"
+  "qchaos.bbl" 1763485800.22167 548 8f8e8af080d45ff50d10711e718eddda "bibtex qchaos"
+  "qchaos.tex" 1763570685.9684 9622 8cde1572a7bf110dcec75a257535822a ""
   (generated)
   "qchaos.aux"
   "qchaos.log"

@@ -5,8 +5,10 @@ using DelimitedFiles
 using ProgressMeter
 using SparseArrays
 using ArnoldiMethod
-include("modules/module_geometries.jl")
-include("modules/helper.jl")
+#include("modules/module_geometries.jl")
+#include("modules/helper.jl")
+
+using QuantumChaos
 
 R_vec = readdlm("data/data_stadium/rect_around.txt")   # Need to convert the vector to a RectGeom.
 R_out = RectGeom(R_vec...)
@@ -33,7 +35,7 @@ function num_eigen_rect(R_out::RectGeom, k::Int)
 end
 
 k_list = [1600, 2500, 3600, 4900]
-#k_list = [64]
+#k_list = [6400]
 for k in k_list
     num_eigen_rect(R_out, k)
 end

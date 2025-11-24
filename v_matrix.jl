@@ -2,14 +2,16 @@ using Base.Threads
 using LinearAlgebra
 using DelimitedFiles
 using ProgressMeter
-include("modules/module_geometries.jl")
-include("modules/helper.jl")
+#include("modules/module_geometries.jl")
+#include("modules/helper.jl")
+
+using QuantumChaos
 
 # Input data.
 R = RectGeom(0.0, 1.0, 0.0, 2.0)
 S = BunStadium(R)
 R_out = rect_around(S)
-N = 70
+N = 80
 M = N^2
 V_matrix = zeros(M, M) # La matrice v_nm
 

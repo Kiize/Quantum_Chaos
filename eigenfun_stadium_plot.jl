@@ -2,8 +2,10 @@ using LinearAlgebra
 using GLMakie
 using DelimitedFiles
 using ProgressMeter
-include("modules/module_geometries.jl")
-include("modules/helper.jl")
+#include("modules/module_geometries.jl")
+#include("modules/helper.jl")
+
+using QuantumChaos
 
 # Geometry:
 # S is built from the rectangle R and R_out is the surrounding rectangle.
@@ -15,7 +17,7 @@ R_out = rect_around(S)
 # Parameters:
 # N is the number of points along each axis, k is the number of eigenvalues we evaluated previously.
 
-N = 70
+N = 60
 M = N^2
 k = M ÷ 10 * 8
 
@@ -37,5 +39,5 @@ f = Figure()
 f2 = Figure()
 
 # Heatmap wavefunction. We want to plot the ik-th eigenstates.
-ik = 1
-plot_stadium_eigenstate(k, R_out, N, f, f2, flattened_states, coeff, ik)
+ik = 10
+plot_stadium_eigenstate(k, R_out, N, f, f2, flattened_states, coeff, ik, S)

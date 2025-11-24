@@ -132,15 +132,16 @@ Substituting \eqref{eq:em_psi} we get
 where
 \begin{equation}
     H_{ij} = \int_{\text{Rect}}dx\, \phi_{i}(x) H \phi_{j}(x) = E_{ij} \delta_{ij} + V_0 v_{ij},
+    \label{eq:ham}
 \end{equation}
 and 
 \begin{equation}
     v_{ij} = \int_{\text{II}}dx\, \phi_{i}(x) \phi_{j}(x).
 \end{equation}
-So now the problem is to diagonalize the Hamiltonian.
+So now the problem is to obtain the energies of the Hamiltonian.
 
 \section{Results for the Stadium}
-Let us consider a Bunimovich stadium, where the rectangle has length $L_x = 1, L_y = 2$. Consider, using our previous notation, different values $M = N^2 \in {1600, 2500, 3600, 4900}$, then solving the problem for the first $k = 0.8M$ eigenvalues
+Let us consider a Bunimovich stadium, where the rectangle has length $L_x = 1, L_y = 2$. Consider, using our previous notation, different values $M = N^2 \in {1600, 2500, 3600, 4900, 6400}$, then solving the problem for the first $k = 0.8M$ eigenvalues
 we obtain Fig.~\ref{fig:stadium_ene}.
 \begin{figure}[h]
     \centering
@@ -180,10 +181,33 @@ which is the theoretical distribution for integrable system, and the GOE distrib
 which is the theoretical distribution for chaotic systems. In Fig.~\ref{fig:pdf_comp} we compare the histogram of both the spacing for the Bunimovich stadium (left) and the rectangular billiard (right).
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.6\textwidth]{../figs/hist_ene_stadium_N2450.png}
+    \includegraphics[width=0.6\textwidth]{../figs/hist_ene_stadium_N6400_fit.png}
     \caption{Plot of the histogram of the spacings and the two distributions defined previously.}
     \label{fig:pdf_comp}
 \end{figure}
+\\
+We can conclude that to truly distinguish between the distributions we have to go higher in number of points $M$ considered.
+
+\section{Discussion on the distribution}
+
+\section{On the eigenfunctions of the stadium}
+
+By diagonalizing the Hamiltonian $H$ Eq.~\eqref{eq:ham} we get both the eigenvalues $E_n$ and the eigenfunctions $c_j^{(n)}$. 
+For every energy $E_n$, in fact, there is a corresponding eigenvector $c^{(n)}$ which is a vector of length $M$. These eigenvectors are the coefficients of the expansion of our state $\psi$ Eq.~\eqref{eq:em_psi}, which we can now re-write as
+\begin{equation}
+    \psi_n(x) = \sum_i c_i^{(n)} \phi_i(x).
+\end{equation}
+We can now plot the amplitude of the $n$-th state $\psi_n$ in an heatmap, as shown in Fig.~\ref{fig:state_stad}.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../figs/figs_stadium/rect_eigenstate_k3920_ik1.png}
+    \caption{Heatmap of $|\psi_1|^2$ in the case of $M = 4900, k= 0.8M$.}
+    \label{fig:state_stad}
+\end{figure}
+
+\section{Results and conclusions}
+Despite the statistical properties of the eigenvalues do not clearly show a chaotic behaviour, this project lays the foundations for some in-depth work in quantum chaos, as we have introduced the main tools (the expansion method and the unfolding of the spectrum) 
+to analyze a quantum chaotic system such as a quantum billiard.
 
 \clearpage
 \bibliography{refs.bib}{}
